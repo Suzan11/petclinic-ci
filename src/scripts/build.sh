@@ -18,14 +18,6 @@ if ! command -v mvn &>/dev/null; then
     sudo yum install -y maven || sudo apt-get install -y maven
 fi
 
-# Verify if the project is set to generate a WAR file
-echo "Ensuring project is configured to produce a WAR file..."
-if ! grep -q "<packaging>war</packaging>" "$SOURCE_DIR/pom.xml"; then
-    echo "Setting packaging to WAR in pom.xml..."
-    sed -i 's|<packaging>.*</packaging>|<packaging>war</packaging>|g' "$SOURCE_DIR/pom.xml" || \
-    echo -e "\n<packaging>war</packaging>" >> "$SOURCE_DIR/pom.xml"
-fi
-
 # Build the application
 echo "Building the application..."
 mvn -f "$SOURCE_DIR/pom.xml" clean package -DskipTests
