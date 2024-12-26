@@ -1,16 +1,14 @@
 #!/bin/bash
 
-# Default values for arguments
-SOURCE_DIR="./"
-OUTPUT_DIR="./build"
+# Ensure both arguments (SOURCE_DIR and OUTPUT_DIR) are provided
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Error: Both SOURCE_DIR and OUTPUT_DIR must be provided."
+    exit 1
+fi
 
-# Parse arguments for custom source and output directories
-while getopts s:o: flag; do
-    case "${flag}" in
-        s) SOURCE_DIR=${OPTARG};;
-        o) OUTPUT_DIR=${OPTARG};;
-    esac
-done
+# Set the variables from the arguments
+SOURCE_DIR="$1"
+OUTPUT_DIR="$2"
 
 # Ensure Maven is installed
 if ! command -v mvn &>/dev/null; then
