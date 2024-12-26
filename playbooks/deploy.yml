@@ -1,1 +1,20 @@
-# Ansible playbook for deployment placeholder
+---
+- name: Deploy Pet Clinic to Tomcat
+  hosts: all
+  become: yes
+  vars:
+    war_file_path: "/build/petclinic.war"  # Default WAR file path
+    tomcat_webapps_dir: "/usr/share/tomcat/webapps"  # Default Tomcat webapps directory
+    tomcat_service_name: "tomcat"  # Default Tomcat service name
+
+  tasks:
+    - name: Copy WAR file to Tomcat webapps directory
+      copy:
+        src: "{{ war_file_path }}"
+        dest: "{{ tomcat_webapps_dir }}"
+        mode: '0644'
+
+    - name: Restart Tomcat service
+      service:
+        name: "{{ tomcat_service_name }}"
+        state: restarted
