@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6,10 +7,15 @@
   <groupId>org.springframework.samples</groupId>
   <artifactId>spring-petclinic</artifactId>
   <version>2.3.1.BUILD-SNAPSHOT</version>
+=======
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
     <version>2.3.1.RELEASE</version>
   </parent>
 
@@ -36,35 +42,94 @@
 
   <dependencies>
     <!-- Spring and Spring Boot dependencies -->
+=======
+    <version>3.4.0</version>
+    <relativePath></relativePath> <!-- lookup parent from repository -->
+  </parent>
+
+  <groupId>org.springframework.samples</groupId>
+  <artifactId>spring-petclinic</artifactId>
+  <version>3.4.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>spring-petclinic</name>
+
+  <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- Spring Boot Starter Web without embedded Tomcat -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- External Tomcat dependency -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
       <scope>provided</scope>
     </dependency>
+<<<<<<< HEAD
+=======
+
+    <!-- Spring Boot Starter Actuator for monitoring and management -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
+<<<<<<< HEAD
+=======
+
+    <!-- Spring Boot Starter Cache for caching -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-cache</artifactId>
     </dependency>
+<<<<<<< HEAD
+=======
+
+    <!-- Spring Data JPA for persistence -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+<<<<<<< HEAD
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+=======
+
+    <!-- Spring Boot Starter for validation -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
+<<<<<<< HEAD
+=======
+
+    <!-- Thymeleaf for templating -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
+<<<<<<< HEAD
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -78,11 +143,16 @@
     </dependency>
 
     <!-- Databases - Uses H2 by default -->
+=======
+
+    <!-- H2 Database (in-memory for testing purposes) -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
+<<<<<<< HEAD
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -137,11 +207,41 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <optional>true</optional>
+=======
+
+    <!-- MySQL Connector for MySQL database support -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Spring Boot Test dependency for testing -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Jakarta XML Binding (JAXB) API -->
+    <dependency>
+        <groupId>jakarta.xml.bind</groupId>
+        <artifactId>jakarta.xml.bind-api</artifactId>
+        <version>3.0.1</version> <!-- Version for Jakarta EE 9 and Spring Boot 3.x -->
+    </dependency>
+
+    <!-- JAXB Runtime dependency -->
+    <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>3.0.1</version> <!-- Version for Jakarta EE 9 and Spring Boot 3.x -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+<<<<<<< HEAD
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -176,11 +276,25 @@
           </execution>
         </executions>
       </plugin>
+=======
+      <!-- Maven WAR Plugin to package the project as a WAR file -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml> <!-- Disables missing web.xml error for Spring Boot WAR -->
+        </configuration>
+      </plugin>
+
+      <!-- Spring Boot Maven Plugin to repackage the application -->
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
           <execution>
+<<<<<<< HEAD
             <!-- Spring Boot Actuator displays build-related information
               if a META-INF/build-info.properties file is present -->
             <goals>
@@ -212,10 +326,15 @@
             <phase>prepare-package</phase>
             <goals>
               <goal>report</goal>
+=======
+            <goals>
+              <goal>repackage</goal>
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
             </goals>
           </execution>
         </executions>
       </plugin>
+<<<<<<< HEAD
 
       <!-- Spring Boot Actuator displays build-related information if a git.properties
         file is present at the classpath -->
@@ -375,4 +494,8 @@
     </profile>
   </profiles>
 
+=======
+    </plugins>
+  </build>
+>>>>>>> 266a854ce39d2840110705b695e599cd6e6fe15f
 </project>
