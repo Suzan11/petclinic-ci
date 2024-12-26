@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Building the application...'
         sh """
-            ./scripts/build.sh -s ${SRC_DIR} -o ${BUILD_DIR}
+             ./scripts/build.sh ${SRC_DIR} ${BUILD_DIR}
         """
             }
         }
