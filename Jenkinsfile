@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SRC_DIR = "${WORKSPACE}"               // Source directory at the root of the workspace
+        SRC_DIR = "${WORKSPACE}/src"               // Source directory at the root of the workspace
         BUILD_DIR = "${WORKSPACE}/build"       // Build output directory
         WAR_FILE = "${BUILD_DIR}/petclinic.war" // WAR file location
         TOMCAT_DIR = "/home/tomcat/apache-tomcat-10.1.34/webapps"
