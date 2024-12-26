@@ -20,7 +20,8 @@ fi
 echo "Building the application..."
 
 # Run Maven with the correct POM path
-mvn -f "$SOURCE_DIR/pom.xml" clean package -DskipTests
+# Use the correct path for the pom.xml
+mvn clean package -f "$SOURCE_DIR/pom.xml" -DskipTests
 
 # Move the WAR file to the output directory
 mkdir -p "$OUTPUT_DIR"
