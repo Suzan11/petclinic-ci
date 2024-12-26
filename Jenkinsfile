@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        SRC_DIR = "${WORKSPACE}/src"               // Source directory at the root of the workspace
-        BUILD_DIR = "${WORKSPACE}/build"       // Build output directory
-        WAR_FILE = "${BUILD_DIR}/petclinic.war" // WAR file location
+        SRC_DIR = "${WORKSPACE}/src"
+        BUILD_DIR = "${WORKSPACE}/build"
+        WAR_FILE = "${BUILD_DIR}/petclinic.war"
         TOMCAT_DIR = "/home/tomcat/apache-tomcat-10.1.34/webapps"
         ANSIBLE_HOSTS = "${WORKSPACE}/inventory/hosts"
     }
@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo 'Checking out code...'
-                git branch: 'main', url: 'https://github.com/Suzan11/petclinic-ci.git'
+                git branch: 'main', url: 'https://github.com/Suzan11/petclinic-ci.git', changelog: false, poll: false
             }
         }
         stage('Build Application') {
