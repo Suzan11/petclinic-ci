@@ -3,9 +3,11 @@
   hosts: all
   become: yes
   vars:
-    war_file_path: "/build/petclinic.war"  # Default WAR file path
-    tomcat_webapps_dir: "/usr/share/tomcat/webapps"  # Default Tomcat webapps directory
-    tomcat_service_name: "tomcat"  # Default Tomcat service name
+    war_file_path: "{{ WAR_FILE }}"  # Use Jenkins WAR_FILE environment variable
+    tomcat_webapps_dir: "{{ TOMCAT_DIR }}"  # Use Jenkins TOMCAT_DIR environment variable
+    tomcat_base_dir: "/home/tomcat/apache-tomcat-10.1.34"  # Tomcat base directory
+    tomcat_user: "tomcat"  # Tomcat user (adjust if necessary)
+    java_home: "/usr/lib/jvm/java-11-openjdk"  # Example JAVA_HOME, adjust as needed
 
   tasks:
     - name: Copy WAR file to Tomcat webapps directory
@@ -13,8 +15,30 @@
         src: "{{ war_file_path }}"
         dest: "{{ tomcat_webapps_dir }}"
         mode: '0644'
+      become: true
+      become_user: "{{ tomcat_user }}"
 
-    - name: Restart Tomcat service
-      service:
-        name: "{{ tomcat_service_name }}"
-        state: restarted
+    - name: Stop Tomcat (using catalina.sh to stop Tomcat)
+      shell: |
+        if [ -f "{{ tomcat_base_dir }}/bin/catalina.sh" ]; then
+          echo "Stopping Tomcat..."
+          {{ tomcat_base_dir }}/bin/catalina.sh stop
+        else
+          echo "Catalina script not found. Skipping Tomcat stop."
+        fi
+      become: true
+      become_user: "{{ tomcat_user }}"
+      ignore_errors: yes  # Ignore errors if Tomcat is not running or catalina.sh is missing
+
+    - name: Start Tomcat in the background using nohup
+      shell: |
+        unset JRE_HOME
+        unset JAVA_TOOL_OPTIONS
+        echo "Starting Tomcat in the background using nohup..."
+        cd {{ tomcat_base_dir }}/bin && source ./setenv.sh && nohup ./startup.sh > /dev/null 2>&1 &
+      become: true
+      become_user: "{{ tomcat_user }}"
+      environment:
+        JAVA_HOME: "{{ java_home }}"
+        LANG: en_US.UTF-8
+        LC_ALL: en_US.UTF-8
