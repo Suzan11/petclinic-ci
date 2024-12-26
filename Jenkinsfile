@@ -17,7 +17,9 @@ pipeline {
         stage('Build Application') {
             steps {
                 echo 'Building the application...'
-                sh './scripts/build.sh -s ${SRC_DIR} -o ${BUILD_DIR}'
+        sh """
+            ./scripts/build.sh -s ${SRC_DIR} -o ${BUILD_DIR}
+        """
             }
         }
         stage('Deploy Application') {

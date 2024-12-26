@@ -10,17 +10,27 @@ fi
 SOURCE_DIR="$1"
 OUTPUT_DIR="$2"
 
+# Debugging output to verify paths
+echo "SOURCE_DIR: $SOURCE_DIR"
+echo "OUTPUT_DIR: $OUTPUT_DIR"
+echo "POM file path: $SOURCE_DIR/pom.xml"
+
 # Ensure Maven is installed
 if ! command -v mvn &>/dev/null; then
     echo "Maven not found, installing..."
     sudo yum install -y maven || sudo apt-get install -y maven
 fi
 
+# Check if pom.xml exists at the specified location
+if [ ! -f "$SOURCE_DIR/pom.xml" ]; then
+    echo "Error: pom.xml not found at $SOURCE_DIR/pom.xml"
+    exit 1
+fi
+
 # Build the application
 echo "Building the application..."
 
 # Run Maven with the correct POM path
-# Use the correct path for the pom.xml
 mvn clean package -f "$SOURCE_DIR/pom.xml" -DskipTests
 
 # Move the WAR file to the output directory
