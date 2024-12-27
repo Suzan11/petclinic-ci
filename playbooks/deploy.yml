@@ -1,75 +1,28 @@
+---
 - name: Deploy Pet Clinic to Tomcat
   hosts: all
   become: yes
   vars:
-    tomcat_home: "/home/tomcat/apache-tomcat-10.1.34"  # Tomcat home directory
-    tomcat_user: "tomcat"  # Tomcat user
-    java_home: "/home/pet-clinic/java/jdk-17.0.11"  # JAVA_HOME
     war_file_path: "{{ WAR_FILE }}"  # Use Jenkins WAR_FILE environment variable
     tomcat_webapps_dir: "{{ TOMCAT_DIR }}"  # Use Jenkins TOMCAT_DIR environment variable
-    spring_petclinic_context_file: "{{ tomcat_home }}/conf/Catalina/localhost/spring-petclinic.xml"
-    server_xml_path: "{{ tomcat_home }}/conf/server.xml"
+    tomcat_base_dir: "/home/tomcat/apache-tomcat-10.1.34"  # Tomcat base directory
+    tomcat_user: "tomcat"  # Tomcat user (adjust if necessary)
+    java_home: "/usr/lib/jvm/java-11-openjdk"  # Example JAVA_HOME, adjust as needed
 
   tasks:
-    - name: Copy WAR file to Tomcat webapps directory if not already present
+    - name: Copy WAR file to Tomcat webapps directory
       copy:
         src: "{{ war_file_path }}"
-        dest: "{{ tomcat_webapps_dir }}/{{ war_file_path | basename }}"
+        dest: "{{ tomcat_webapps_dir }}"
+        become: true
+        become_user: "{{ tomcat_user }}"
         mode: '0644'
-      become: true
-      become_user: "{{ tomcat_user }}"
-      when: not (war_file_path | basename) in lookup('fileglob', tomcat_webapps_dir)
-
-    - name: Check if port 9091 connector already exists in server.xml
-      shell: grep 'port="9091"' {{ server_xml_path }}
-      register: connector_check
-      failed_when: connector_check.rc > 1  # Ignore "not found" errors (rc=1)
-      ignore_errors: true
-
-    - name: Add connector for port 9091 if not already present
-      lineinfile:
-        path: "{{ server_xml_path }}"
-        insertafter: "<!-- Define a non-SSL HTTP/1.1 Connector on port 8080 -->"
-        line: |
-          <Connector port="9091" protocol="HTTP/1.1"
-                     connectionTimeout="20000"
-                     redirectPort="8443" />
-      become: true
-      become_user: "{{ tomcat_user }}"
-      when: connector_check.rc == 1
-
-    - name: Ensure tomcat group exists (to avoid permission issues)
-      group:
-        name: "{{ tomcat_user }}"
-        state: present
-
-    - name: Ensure tomcat user exists
-      user:
-        name: "{{ tomcat_user }}"
-        group: "{{ tomcat_user }}"
-        shell: /bin/bash
-        state: present
-
-    - name: Check if Spring Pet Clinic context file exists
-      stat:
-        path: "{{ spring_petclinic_context_file }}"
-      register: context_file_check
-
-    - name: Create context configuration for Spring Pet Clinic if not already present
-      copy:
-        dest: "{{ spring_petclinic_context_file }}"
-        content: |
-          <Context path="" docBase="{{ tomcat_webapps_dir }}/{{ war_file_path | basename }}" />
-        owner: "{{ tomcat_user }}"
-        group: "{{ tomcat_user }}"
-        mode: '0644'
-      when: not context_file_check.stat.exists
 
     - name: Stop Tomcat (using catalina.sh to stop Tomcat)
       shell: |
-        if [ -f "{{ tomcat_home }}/bin/catalina.sh" ]; then
+        if [ -f "{{ tomcat_base_dir }}/bin/catalina.sh" ]; then
           echo "Stopping Tomcat..."
-          {{ tomcat_home }}/bin/catalina.sh stop
+          {{ tomcat_base_dir }}/bin/catalina.sh stop
         else
           echo "Catalina script not found. Skipping Tomcat stop."
         fi
@@ -82,7 +35,7 @@
         unset JRE_HOME
         unset JAVA_TOOL_OPTIONS
         echo "Starting Tomcat in the background using nohup..."
-        cd {{ tomcat_home }}/bin && source ./setenv.sh && nohup ./startup.sh > /dev/null 2>&1 &
+        cd {{ tomcat_base_dir }}/bin && source ./setenv.sh && nohup ./startup.sh > /dev/null 2>&1 &
       become: true
       become_user: "{{ tomcat_user }}"
       environment:
