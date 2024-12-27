@@ -18,11 +18,12 @@
         mode: '0644'
       become: true
       become_user: "{{ tomcat_user }}"
-      when: not (war_file_path | regex_search('{{ tomcat_webapps_dir }}/{{ war_file_path | basename }}'))
+      when: not (war_file_path | basename) in lookup('fileglob', tomcat_webapps_dir)
 
     - name: Check if port 9091 connector already exists in server.xml
       shell: grep 'port="9091"' {{ server_xml_path }}
       register: connector_check
+      failed_when: connector_check.rc > 1  # Ignore "not found" errors (rc=1)
       ignore_errors: true
 
     - name: Add connector for port 9091 if not already present
@@ -35,7 +36,19 @@
                      redirectPort="8443" />
       become: true
       become_user: "{{ tomcat_user }}"
-      when: connector_check.rc != 0
+      when: connector_check.rc == 1
+
+    - name: Ensure tomcat group exists (to avoid permission issues)
+      group:
+        name: "{{ tomcat_user }}"
+        state: present
+
+    - name: Ensure tomcat user exists
+      user:
+        name: "{{ tomcat_user }}"
+        group: "{{ tomcat_user }}"
+        shell: /bin/bash
+        state: present
 
     - name: Check if Spring Pet Clinic context file exists
       stat:
