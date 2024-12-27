@@ -4,7 +4,7 @@
   vars:
     tomcat_home: "/home/tomcat/apache-tomcat-10.1.34"  # Tomcat home directory
     tomcat_user: "tomcat"  # Tomcat user
-    java_home: "/usr/lib/jvm/java-11-openjdk"  # JAVA_HOME
+    java_home: "/home/pet-clinic/java/jdk-17.0.11"  # JAVA_HOME
     war_file_path: "{{ WAR_FILE }}"  # Use Jenkins WAR_FILE environment variable
     tomcat_webapps_dir: "{{ TOMCAT_DIR }}"  # Use Jenkins TOMCAT_DIR environment variable
     spring_petclinic_context_file: "{{ tomcat_home }}/conf/Catalina/localhost/spring-petclinic.xml"

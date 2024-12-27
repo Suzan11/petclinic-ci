@@ -3,6 +3,7 @@ pipeline {
     environment {
         SRC_DIR = "${WORKSPACE}/src"
         BUILD_DIR = "${WORKSPACE}/build"
+        WAR_FILE = "${BUILD_DIR}/petclinic.war"
         TOMCAT_DIR = "/home/tomcat/apache-tomcat-10.1.34/webapps"
         ANSIBLE_HOSTS = "${WORKSPACE}/inventory/hosts"
     }
@@ -16,17 +17,9 @@ pipeline {
         stage('Build Application') {
             steps {
                 echo 'Building the application...'
-                sh """
-                    ./scripts/build.sh ${SRC_DIR} ${BUILD_DIR}
-                """
-                // Dynamically find the WAR file generated after the build
-                script {
-                    // Use find to search for the WAR file inside the BUILD_DIR
-                    def warFile = sh(script: "find ${BUILD_DIR} -name '*.war' | head -n 1", returnStdout: true).trim()
-                    // Set the WAR_FILE environment variable dynamically
-                    env.WAR_FILE = warFile
-                    echo "WAR file located at: ${env.WAR_FILE}"
-                }
+        sh """
+            ./scripts/build.sh ${SRC_DIR}  ${BUILD_DIR}
+        """
             }
         }
         stage('Deploy Application') {
@@ -35,7 +28,7 @@ pipeline {
                 ansiblePlaybook playbook: './playbooks/deploy.yml',
                                 inventory: ANSIBLE_HOSTS,
                                 extraVars: [
-                                    war_file_path: "${env.WAR_FILE}",
+                                    war_file_path: "${WAR_FILE}",
                                     tomcat_webapps_dir: TOMCAT_DIR
                                 ]
             }
@@ -43,7 +36,7 @@ pipeline {
         stage('Sanity Check') {
             steps {
                 echo 'Running sanity checks...'
-                sh './scripts/sanity_check.sh http://localhost:9090/petclinic'
+                sh './scripts/sanity_check.sh http://ec2-18-223-237-246.us-east-2.compute.amazonaws.com:9091/hello-world/'
             }
         }
         stage('Configure Monitoring') {
