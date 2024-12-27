@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 6.0//EN"
+        "https://struts.apache.org/dtds/struts-6.0.dtd">
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.ui.theme" value="simple"/>
+    <constant name="struts.action.extension" value=""/>
+    <constant name="struts.custom.i18n.resources" value="DefaultMessages"/>
+
+    <package name="default" extends="struts-default">
+        <default-action-ref name="index"/>
+        <action name="index">
+            <result>/WEB-INF/index.jsp</result>
+        </action>
+
+        <action name="hello" class="org.apache.struts.examples.sitemesh3.HelloAction">
+            <result name="success">/WEB-INF/hello1.jsp</result>
+            <result name="other">/WEB-INF/hello2.jsp</result>
+            <result name="error">/WEB-INF/error.jsp</result>
+        </action>
+
+    </package>
+</struts>

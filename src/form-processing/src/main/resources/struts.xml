@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 6.0//EN"
+        "https://struts.apache.org/dtds/struts-6.0.dtd">
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+    <constant name="struts.mapper.action.prefix.enabled" value="true"/>
+
+    <package name="basicstruts" namespace="/" extends="struts-default">
+        <default-action-ref name="index"/>
+        <action name="index">
+            <result type="redirectAction">test/index</result>
+        </action>
+
+    </package>
+
+    <package name="basicstruts2" namespace="/test" extends="struts-default">
+        <default-action-ref name="index"/>
+        <!-- If no class attribute is specified the framework will assume success and
+        render the result index.jsp -->
+        <!-- If no name value for the result node is specified the success value is the default -->
+        <action name="index">
+            <result>/WEB-INF/index.jsp</result>
+        </action>
+
+        <!-- If the URL is hello.action then call the execute method of class HelloWorldAction.
+        If the result returned by the execute method is success render the HelloWorld.jsp -->
+        <action name="hello" class="org.apache.struts.helloworld.action.HelloWorldAction" method="execute">
+            <result name="success">/WEB-INF/HelloWorld.jsp</result>
+        </action>
+
+        <action name="register" class="org.apache.struts.register.action.Register" method="input">
+            <result name="input">/WEB-INF/register.jsp</result>
+        </action>
+        <action name="register-cancel" class="org.apache.struts.register.action.Register" method="cancel2">
+            <result type="redirectAction">index</result>
+        </action>
+        <action name="register-submit" class="org.apache.struts.register.action.Register" method="execute2">
+            <result>/WEB-INF/thankyou.jsp</result>
+        </action>
+    </package>
+</struts>

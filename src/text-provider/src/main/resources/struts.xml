@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "https://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+  <constant name="struts.devMode" value="true"/>
+  <constant name="struts.convention.action.packages" value="org.apache.struts_example"/>
+  <constant name="struts.action.extension" value=","/>
+
+  <constant name="struts.custom.i18n.resources" value="DefaultMessages"/>
+
+  <!--
+  This factory overrides the one defined in Struts and will be used a default one across the framework
+  -->
+  <bean type="org.apache.struts2.text.TextProviderFactory"
+        class="org.apache.struts_example.MyTextProviderFactory"
+        name="myTextProviderFactory"
+        scope="singleton"/>
+
+  <constant name="struts.textProviderFactory" value="myTextProviderFactory"/>
+
+  <!--
+  Alternatively, if you prefer to extend only TextProviderSupport,
+  you can define the custrom TextProvider like this (see Struts v2.5.10 TextProvider Javadocs):
+  -->
+  <!--
+  <bean class="com.company.MyTextProviderSupport" name="MyTextProviderSupport"
+    type="org.apache.struts2.text.TextProvider" />
+  <constant name="struts.xworkTextProvider" value="MyTextProviderSupport" />
+  -->
+
+  <bean type="org.apache.struts2.text.LocalizedTextProvider" name="myProvider" class="org.apache.struts_example.MyLocalizedTextProvider" scope="singleton" />
+
+  <constant name="struts.localizedTextProvider" value="myProvider" />
+
+  <package name="default" extends="struts-default">
+
+    <default-action-ref name="index"/>
+
+  </package>
+</struts>
