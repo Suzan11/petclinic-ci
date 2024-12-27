@@ -23,14 +23,6 @@
         group: "{{ tomcat_group }}"
         mode: '0644'
 
-    - name: Set ownership and permissions for extracted directory
-      ansible.builtin.file:
-        path: "{{ tomcat_webapps_dir }}/{{ war_file_path | basename | regex_replace('.war$', '') }}"
-        owner: "{{ tomcat_user }}"
-        group: "{{ tomcat_group }}"
-        recurse: yes  # Apply recursively to all files and directories
-        mode: '0755'
-
     - name: Stop Tomcat (using catalina.sh to stop Tomcat)
       shell: |
         if [ -f "{{ tomcat_base_dir }}/bin/catalina.sh" ]; then
@@ -55,3 +47,20 @@
         JAVA_HOME: "{{ java_home }}"
         LANG: en_US.UTF-8
         LC_ALL: en_US.UTF-8
+
+    - name: Wait for Tomcat to start and deploy the WAR file
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 9091  # Update the port to 9091
+        timeout: 60
+        state: started
+      become: true
+      become_user: "{{ tomcat_user }}"
+
+    - name: Set ownership and permissions for extracted directory
+      ansible.builtin.file:
+        path: "{{ tomcat_webapps_dir }}/{{ war_file_path | basename | regex_replace('.war$', '') }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+        recurse: yes  # Apply recursively to all files and directories
+        mode: '0755'
