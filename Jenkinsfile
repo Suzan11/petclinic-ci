@@ -17,9 +17,9 @@ pipeline {
         stage('Build Application') {
             steps {
                 echo 'Building the application...'
-        sh """
-            ./scripts/build.sh ${SRC_DIR}  ${BUILD_DIR}
-        """
+                sh """
+                    ./scripts/build.sh ${SRC_DIR}  ${BUILD_DIR}
+                """
             }
         }
         stage('Deploy Application') {
@@ -35,6 +35,8 @@ pipeline {
         }
         stage('Sanity Check') {
             steps {
+                echo 'Waiting for 2 minutes before running sanity check...'
+                sleep time: 2, unit: 'MINUTES'  // Wait for 2 minutes
                 echo 'Running sanity checks...'
                 sh './scripts/sanity_check.sh http://ec2-18-223-237-246.us-east-2.compute.amazonaws.com:9091/hello-world/'
             }
