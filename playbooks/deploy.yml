@@ -23,6 +23,14 @@
         group: "{{ tomcat_group }}"
         mode: '0644'
 
+    - name: Set ownership and permissions for extracted directory
+      ansible.builtin.file:
+        path: "{{ tomcat_webapps_dir }}/{{ war_file_path | basename | regex_replace('.war$', '') }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+        recurse: yes  # Apply recursively to all files and directories
+        mode: '0755'
+
     - name: Stop Tomcat (using catalina.sh to stop Tomcat)
       shell: |
         if [ -f "{{ tomcat_base_dir }}/bin/catalina.sh" ]; then
