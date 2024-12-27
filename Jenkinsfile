@@ -3,7 +3,7 @@ pipeline {
     environment {
         SRC_DIR = "${WORKSPACE}/src"
         BUILD_DIR = "${WORKSPACE}/build"
-        WAR_FILE = "${BUILD_DIR}/petclinic.war"
+        WAR_FILE = "${BUILD_DIR}/hello-world.war"
         TOMCAT_DIR = "/home/tomcat/apache-tomcat-10.1.34/webapps"
         ANSIBLE_HOSTS = "${WORKSPACE}/inventory/hosts"
     }
