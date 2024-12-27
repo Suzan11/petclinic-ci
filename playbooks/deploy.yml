@@ -1,4 +1,3 @@
----
 - name: Deploy Pet Clinic to Tomcat
   hosts: all
   become: yes
@@ -7,15 +6,21 @@
     tomcat_webapps_dir: "{{ TOMCAT_DIR }}"  # Use Jenkins TOMCAT_DIR environment variable
     tomcat_base_dir: "/home/tomcat/apache-tomcat-10.1.34"  # Tomcat base directory
     tomcat_user: "tomcat"  # Tomcat user (adjust if necessary)
-    java_home: "/usr/lib/jvm/java-11-openjdk"  # Example JAVA_HOME, adjust as needed
+    tomcat_group: "pet-clinic"  # Group for the WAR file (renamed to tomcat_group)
+    java_home: "/home/pet-clinic/java/jdk-17.0.11"  # Example JAVA_HOME, adjust as needed
 
   tasks:
     - name: Copy WAR file to Tomcat webapps directory
-      copy:
+      ansible.builtin.copy:
         src: "{{ war_file_path }}"
         dest: "{{ tomcat_webapps_dir }}"
-        become: true
-        become_user: "{{ tomcat_user }}"
+        mode: '0644'
+
+    - name: Set ownership and permissions for WAR file
+      ansible.builtin.file:
+        path: "{{ tomcat_webapps_dir }}/{{ war_file_path | basename }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
         mode: '0644'
 
     - name: Stop Tomcat (using catalina.sh to stop Tomcat)
