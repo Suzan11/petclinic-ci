@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the Tomcat server URL
-TOMCAT_URL="http://localhost:9090"
+TOMCAT_URL="http://ec2-18-223-237-246.us-east-2.compute.amazonaws.com:9090"
 APP_NAME="petclinic"  # Update if your application is named differently
 
 # Check if Tomcat is running
