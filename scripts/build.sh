@@ -35,7 +35,7 @@ mvn clean package -f "$SOURCE_DIR/pom.xml" -DskipTests
 
 # Move the WAR file to the output directory
 mkdir -p "$OUTPUT_DIR"
-WAR_FILE=$(find "$SOURCE_DIR/target" -name "*.war")
+WAR_FILE=$(find "$SOURCE_DIR/helloworld/target" -name "*.war")
 if [ -f "$WAR_FILE" ]; then
     mv "$WAR_FILE" "$OUTPUT_DIR/"
     echo "Build successful. WAR file located at: $OUTPUT_DIR/$(basename "$WAR_FILE")"

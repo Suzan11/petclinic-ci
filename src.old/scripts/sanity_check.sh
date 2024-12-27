@@ -1,9 +1,16 @@
 #!/bin/bash
 
 # Define the Tomcat server URL
-TOMCAT_URL="http://localhost:9090"
-APP_NAME="petclinic"  # Update if your application is named differently
+TOMCAT_URL="http://ec2-18-223-237-246.us-east-2.compute.amazonaws.com:9090"
 
+# Ensure both arguments (SOURCE_DIR and OUTPUT_DIR) are provided
+if [ -z "$1" ]; then
+    echo "Error:  TOMCAT_URL must be provided."
+    exit 1
+fi
+
+# Set the variables from the arguments
+TOMCAT_URL="$1"
 # Check if Tomcat is running
 echo "Checking if Tomcat is running..."
 if ps aux | grep -v grep | grep 'tomcat' > /dev/null
